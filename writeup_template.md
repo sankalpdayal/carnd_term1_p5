@@ -167,7 +167,19 @@ To make the bounding box more stabe and fewer false positives, time based inform
 
 [![Vehicle Detection with Clustering](http://img.youtube.com/vi/N-WdC5BG8eU/0.jpg)](https://www.youtube.com/watch?v=N-WdC5BG8eU)
 
-#### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
+#### 2. Description of clustering technique to filter for false positives and method for combining overlapping bounding boxes.
+
+To real life scenario following assumptions can be made
+
+1. Vehicles if visible can last for few seconds in the camera.
+2. The position of the vehicle (in the frames) will move but slowly with time.
+3. If there is a vehcile, there will be positive detections from classifier not only in a single frame but also accross multiple frames.
+4. Since The position of the vehicle (in the frames) will move but slowly with time, the size of the bounding box will also increase or decrease slowly.
+
+Considering these assumpitions I implemented a clustering technique to achieve desired result. The technique works in the following manner
+
+1. It consideres the latest 30 frames (1.5 seconds)
+2. For these latest frames, it iterates over all the positive detections. 
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.   
 

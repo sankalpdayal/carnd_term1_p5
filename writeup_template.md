@@ -202,7 +202,21 @@ Here's an example result showing the centers from a series of frames of video, a
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Problems / issues faced in your implementation of this project. 
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I took the approach of training a classifier to detect car images and using it for detection in videos and finally improving it further by taking series of images as a whole. For searching I have taken a windowed approach. In this apporach I found following difficulties
 
+1. Finding best set of features from so many possible combinations is difficult. I have taken a brute force method but it was very time consuming.
+2. Also once features are identified, deciding on what classifier will be best is also difficult as there so many possible classifiers and for each classifier so many possible values of hyper parameters. For now I took LinearSVM as I have taken a brute force method but would have been very time consuming.
+3. I saw some runtime issues with hog computations for certain set of combinations of pixel per cell and cells per block combinations. Hence in my feature selection process, I skipped these combinations.
+4. Selecting scales, y start, y stop positions, overlap was very time consuming and was mostly hit and trial. I am not sure how this could be done better.
+5. Final pipeline image and video both, are taking more time than actual frame rate. I beleive this can be fasten by dropping some frames or making detection parallel. 
+
+#### 2.  Where the pipeline likely fail?  What to do to make it more robust?
+
+1. Since the training was done only on cars, bikes, trucks etc cannot be detected with the classifier. Hence these kind of images also have to be included during training.
+2. I have noticed that pipeline is not very robust whene lighting conditions are changing. This is most probably because of classifier. This can be made more robust by using night conditions during training.
+3. I still see false positives in the detection process. I believe this can be improved by taking enseble of classifiers instead of just one. 
+4. For now the pipeline is not able to distingusing between two cars separately as the clustering algorithm cluster all the detections as one box if they are all close. May be this can be done better by traking two cars and if they are close propagating their positions.
+5. Tuning the threshold for clustering and combinations for parameters for search window can result in more robust detection algorithm.
+ 

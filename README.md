@@ -35,7 +35,7 @@ First thing I did was to get understanding of size of data, shape if image, data
 
 ## Histogram of Oriented Gradients (HOG)
 
-### 1. Extraction of HOG and other features from the training images.
+### 1. Extraction of HOG features from the training images.
 
 The code for this step is contained in the third code cell of the IPython notebook 'Vehicle_Detection.ipynb' under the title 'Method to get histogram of gradients'. The function `get_hog_features` takes in the image and parameters like orient, pixles per cell etc and returns features. It optionally
 also returns HOG feature image. 
@@ -43,6 +43,8 @@ also returns HOG feature image.
 Here is an example using the B channel of `RGB` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(8, 8)`:
 
 ![alt text][image2]
+
+### 2. Extraction of color features from the training images.
 
 To extract color histogram I used the function `color_hist`. This function is under the title 'Method to extract color historgram'. The function takes in image, number of bins and bins range as input and outputs features.
 
@@ -57,7 +59,7 @@ Dictonary stating what features has 3 keys 'spatial', 'hist', 'hog' and their va
 4. For HOG, if the channels are 'ALL' then extract HOG features for all the three channels and concatenate them.
 5. Finally append all the features extracted and return these.
 
-### 2. Final choice of HOG parameters.
+### 3. Final choice of HOG parameters and color feature parameters.
 
 There can be so many combinations for color space, spatial bins size, orientations etc. To identify best combination I created a list of multiple combinations to choose from. The exploration space had following options
 
@@ -96,7 +98,7 @@ The feature selection which showed the best accuracy has following combination.
 |orient  |11|
 |pixels_per_cell |8|
 
-### 3. Training a classifier using selected HOG features and color features
+### 4. Training a classifier using selected HOG and color features
 
 Since the feature selection and classifer training was combined in previous step, the combination which showed best accuracy resulted in 'LinearSVM' calssifier. The calssifier has validation accuracy of '0.989' and training time of 4.43 seconds. 
 
@@ -107,7 +109,7 @@ Although finally LinearSVM was used because decision tree had lower accuracy and
 
 ## Sliding Window Search
 
-### 1. Describption ofimplementation of sliding window search
+### 1. Describption of implementation of sliding window search
 
 The function to define the search space is given in the cell in python notebook under the title 'Define region for search using the sliding window approach'. I used the test images to decide what the positions and scales. Idea was to make sure all the cars
 in the test images are covered and no search is going on in the areas where there are no cars. I tried scales from 1 to 3. Some examples of the sliding window search are given here.
@@ -116,7 +118,8 @@ in the test images are covered and no search is going on in the areas where ther
 
 ![alt text][image4]
 
-### 2. Vehicle Detection Pipeline (For Image)
+
+### 2. Using different sliding windows to detect vehicles
 
 The search and detection process of combined under a single function `find_cars()`. The function takes in the image, search space combination (y start, y stop, scale, overalp) and feature combination. It also takes 2 classifiers and input. Positive detection is considered if both classifiers 
 find a true detection in the search window. Find cars function implements steps to find car using the sliding window approach
@@ -126,6 +129,7 @@ find a true detection in the search window. Find cars function implements steps 
 2. Normalize the extracted features
 3. Use the normalized features for prediction using and of two classifiers
 4. If prediction from both is true, then store the current window in the rectangles
+
 
 Ultimately I searched on 5 scales and each scale had different Y start and stop positions and overlap. Scales which were smaller were restricted to regions further from car. This is because in those regions car will smaller in size. For higher scales, tend to be more closer
 to car. Also these had higher overlap values to keep the step size smaller. Finally following scale and y start and y stop values and overlap are used
@@ -137,6 +141,8 @@ to car. Also these had higher overlap values to keep the step size smaller. Fina
 |1.75|360|530|0.75|Detect near medium sized cars|
 |2.8|360|550|0.75|Detect near medium sized cars|
 |3.3|360|580|0.75|Detect near large sized cars| 
+
+### 3. Vehicle Detection Pipeline (For Image)
 
 Vehicle Detection Pipeline was combined under a single function `process_image(test_img)`. This function is contained in the cell under the title 'Process image implements the car finding pipeline in an image'. The function implements following steps
 
@@ -158,17 +164,7 @@ Bounding boxes are constructed to cover the area of each blob detected. The resu
 
 ## Video Implementation
 
-### 1. Filter for false positives and method for combining overlapping bounding boxes
-
-If the same pipeline is used on a video. The vehicle detection bound box comes out somewhat wobbly or unstable bounding boxes and some false positives. The output is shown here 
-
-[![Vehicle Detection (Frame by frame)](http://img.youtube.com/vi/cRGjzo0Qmyc/0.jpg)](https://www.youtube.com/watch?v=cRGjzo0Qmyc)
-
-To make the bounding box more stabe and fewer false positives, time based information can be used. This means instead of doing fresh detection everytime with new frame, some history can be used. I have used a clustering method to do this. The output from this technique is shown here 
-
-[![Vehicle Detection with Clustering](http://img.youtube.com/vi/N-WdC5BG8eU/0.jpg)](https://www.youtube.com/watch?v=N-WdC5BG8eU)
-
-### 2. Description of clustering technique to filter for false positives and method for combining overlapping bounding boxes.
+### 1. Description of clustering technique to filter for false positives and method for combining overlapping bounding boxes.
 
 To real life scenario following assumptions can be made
 
@@ -198,6 +194,16 @@ Here's an example result showing the centers from a series of frames of video, a
 
 ### Here the resulting bounding boxes are drawn onto the last frame in the series:
 ![alt text][image8]
+
+### 2. Ouptut of filter for false positives and method for combining overlapping bounding boxes
+
+If the same pipeline is used on a video. The vehicle detection bound box comes out somewhat wobbly or unstable bounding boxes and some false positives. The output is shown here 
+
+[![Vehicle Detection (Frame by frame)](http://img.youtube.com/vi/cRGjzo0Qmyc/0.jpg)](https://www.youtube.com/watch?v=cRGjzo0Qmyc)
+
+To make the bounding box more stabe and fewer false positives, time based information can be used. This means instead of doing fresh detection everytime with new frame, some history can be used. I have used a clustering method to do this. The output from this technique is shown here 
+
+[![Vehicle Detection with Clustering](http://img.youtube.com/vi/N-WdC5BG8eU/0.jpg)](https://www.youtube.com/watch?v=N-WdC5BG8eU)
 
 ---
 

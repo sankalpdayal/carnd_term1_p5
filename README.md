@@ -1,4 +1,4 @@
-# ** Vehicle Detection Project **
+# Vehicle Detection Project
 
 The goals / steps of this project are the following:
 
@@ -20,22 +20,22 @@ The goals / steps of this project are the following:
 [image7]: ./examples/centers.png
 [image8]: ./examples/final_detection.png
 
-### Here I will consider the [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points individually and describe how I addressed each point in my implementation.  
+#### Here I will consider the [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points individually and describe how I addressed each point in my implementation.  
 
 ---
-### Writeup / README
+## Writeup / README
 
-#### 1. This is the writeup that includes all the rubric points and how each one was addressed. 
+This is the writeup that includes all the rubric points and how each one was addressed. 
 
-### Data Exploration
+## Data Exploration
 
 First thing I did was to get understanding of size of data, shape if image, datatype of image. Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
 ![alt text][image1]
 
-### Histogram of Oriented Gradients (HOG)
+## Histogram of Oriented Gradients (HOG)
 
-#### 1. Extraction of HOG and other features from the training images.
+### 1. Extraction of HOG and other features from the training images.
 
 The code for this step is contained in the third code cell of the IPython notebook 'Vehicle_Detection.ipynb' under the title 'Method to get histogram of gradients'. The function `get_hog_features` takes in the image and parameters like orient, pixles per cell etc and returns features. It optionally
 also returns HOG feature image. 
@@ -57,7 +57,7 @@ Dictonary stating what features has 3 keys 'spatial', 'hist', 'hog' and their va
 4. For HOG, if the channels are 'ALL' then extract HOG features for all the three channels and concatenate them.
 5. Finally append all the features extracted and return these.
 
-#### 2.Final choice of HOG parameters.
+### 2. Final choice of HOG parameters.
 
 There can be so many combinations for color space, spatial bins size, orientations etc. To identify best combination I created a list of multiple combinations to choose from. The exploration space had following options
 
@@ -96,7 +96,7 @@ The feature selection which showed the best accuracy has following combination.
 |orient  |11|
 |pixels_per_cell |8|
 
-#### 3. Training a classifier using selected HOG features and color features
+### 3. Training a classifier using selected HOG features and color features
 
 Since the feature selection and classifer training was combined in previous step, the combination which showed best accuracy resulted in 'LinearSVM' calssifier. The calssifier has validation accuracy of '0.989' and training time of 4.43 seconds. 
 
@@ -105,9 +105,9 @@ Using the same set of features, Decision Trees and SVM with Gaussian Kernel was 
 Although finally LinearSVM was used because decision tree had lower accuracy and Gaussian Kernal had high predicition time.
 
 
-### Sliding Window Search
+## Sliding Window Search
 
-#### 1. Describption ofimplementation of sliding window search
+### 1. Describption ofimplementation of sliding window search
 
 The function to define the search space is given in the cell in python notebook under the title 'Define region for search using the sliding window approach'. I used the test images to decide what the positions and scales. Idea was to make sure all the cars
 in the test images are covered and no search is going on in the areas where there are no cars. I tried scales from 1 to 3. Some examples of the sliding window search are given here.
@@ -116,7 +116,7 @@ in the test images are covered and no search is going on in the areas where ther
 
 ![alt text][image4]
 
-#### 2. Vehicle Detection Pipeline (For Image)
+### 2. Vehicle Detection Pipeline (For Image)
 
 The search and detection process of combined under a single function `find_cars()`. The function takes in the image, search space combination (y start, y stop, scale, overalp) and feature combination. It also takes 2 classifiers and input. Positive detection is considered if both classifiers 
 find a true detection in the search window. Find cars function implements steps to find car using the sliding window approach
@@ -156,9 +156,11 @@ Bounding boxes are constructed to cover the area of each blob detected. The resu
 
 ---
 
-### Video Implementation
+## Video Implementation
 
-#### 1. If the same pipeline is used on a video. The vehicle detection bound box comes out somewhat wobbly or unstable bounding boxes and some false positives. The output is shown here 
+### 1. Filter for false positives and method for combining overlapping bounding boxes
+
+If the same pipeline is used on a video. The vehicle detection bound box comes out somewhat wobbly or unstable bounding boxes and some false positives. The output is shown here 
 
 [![Vehicle Detection (Frame by frame)](http://img.youtube.com/vi/cRGjzo0Qmyc/0.jpg)](https://www.youtube.com/watch?v=cRGjzo0Qmyc)
 
@@ -166,7 +168,7 @@ To make the bounding box more stabe and fewer false positives, time based inform
 
 [![Vehicle Detection with Clustering](http://img.youtube.com/vi/N-WdC5BG8eU/0.jpg)](https://www.youtube.com/watch?v=N-WdC5BG8eU)
 
-#### 2. Description of clustering technique to filter for false positives and method for combining overlapping bounding boxes.
+### 2. Description of clustering technique to filter for false positives and method for combining overlapping bounding boxes.
 
 To real life scenario following assumptions can be made
 
@@ -199,9 +201,9 @@ Here's an example result showing the centers from a series of frames of video, a
 
 ---
 
-### Discussion
+## Discussion
 
-#### 1. Problems / issues faced in your implementation of this project. 
+### 1. Problems / issues faced in your implementation of this project. 
 
 I took the approach of training a classifier to detect car images and using it for detection in videos and finally improving it further by taking series of images as a whole. For searching I have taken a windowed approach. In this apporach I found following difficulties
 
@@ -211,7 +213,7 @@ I took the approach of training a classifier to detect car images and using it f
 4. Selecting scales, y start, y stop positions, overlap was very time consuming and was mostly hit and trial. I am not sure how this could be done better.
 5. Final pipeline image and video both, are taking more time than actual frame rate. I beleive this can be fasten by dropping some frames or making detection parallel. 
 
-#### 2.  Where the pipeline likely fail?  What to do to make it more robust?
+### 2.  Where the pipeline likely fail?  What to do to make it more robust?
 
 1. Since the training was done only on cars, bikes, trucks etc cannot be detected with the classifier. Hence these kind of images also have to be included during training.
 2. I have noticed that pipeline is not very robust whene lighting conditions are changing. This is most probably because of classifier. This can be made more robust by using night conditions during training.

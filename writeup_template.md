@@ -17,8 +17,8 @@ The goals / steps of this project are the following:
 [image4]: ./examples/window_search2.jpg
 [image5]: ./examples/output_bboxes.png
 [image6]: ./examples/bboxes_and_heat.png
-[video1]: ./project_video_output.mp4
-[video1]: ./project_video_output_with_hist.mp4
+[image7]: ./examples/centers.png
+[image8]: ./examples/final_detection.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -180,22 +180,23 @@ Considering these assumpitions I implemented a clustering technique to achieve d
 
 1. It consideres the latest 30 frames (1.5 seconds)
 2. For these latest frames, it iterates over all the positive detections. 
+3. Starting from first of 30 frames and first detected box, it calculates its center and stores it and weight of 1 is given. Also the x and y length are stored.
+4. For every new box, it calculates its distance from existing center. If the distance is lower than a threshold, then it considers it close to existing center else it considers as a new center.
+5. If current center is found close to existing center, the existing center and x,y lengths and weights are updated using the new center. 
+6. This update is done by simple weighted averaging. Where weight of existing center is previous weight and new center as 1. X,Y lenghts are also updated in same manner. The new weight is 1 more than previous weight.
+7. If the current center is found as a new center, the new center is added to list of all centers and weight of 1 is given. Also the x and y length of new center is stored.
+8. For final selection, centers only with a weight greater than a certain threshold are considered. 
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.   
+The implemention is done by creating a new class called `Vehicle_Detect()`. The implementation of this class is done under the cell titled 'Step4: Use time information for more robust prediction'
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
+Here's an example result showing the centers from a series of frames of video, and the centers of the detected frames:
 
-### Here are six frames and their corresponding heatmaps:
+### Here are 30 frames and the corresponding centers for each positive detection:
 
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
 ![alt text][image7]
 
-
+### Here the resulting bounding boxes are drawn onto the last frame in the series:
+![alt text][image8]
 
 ---
 

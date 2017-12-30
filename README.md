@@ -1,4 +1,4 @@
-** Vehicle Detection Project **
+# ** Vehicle Detection Project **
 
 The goals / steps of this project are the following:
 
@@ -12,16 +12,15 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 [image1]: ./examples/car_not_car.png
-[image2]: ./examples/car_not_car_hog.jpg
-[image3]: ./examples/window_search1.jpg
-[image4]: ./examples/window_search2.jpg
+[image2]: ./examples/car_not_car_hog.png
+[image3]: ./examples/window_search1.png
+[image4]: ./examples/window_search2.png
 [image5]: ./examples/output_bboxes.png
 [image6]: ./examples/bboxes_and_heat.png
 [image7]: ./examples/centers.png
 [image8]: ./examples/final_detection.png
 
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points individually and describe how I addressed each point in my implementation.  
 
 ---
 ### Writeup / README

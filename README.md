@@ -199,9 +199,13 @@ Here's an example result showing the centers from a series of frames of video, a
 
 If the same pipeline is used on a video. The vehicle detection bound box comes out somewhat wobbly or unstable bounding boxes and some false positives. The output is shown here 
 
+### Without filtering:
+
 [![Vehicle Detection (Frame by frame)](http://img.youtube.com/vi/cRGjzo0Qmyc/0.jpg)](https://www.youtube.com/watch?v=cRGjzo0Qmyc)
 
 To make the bounding box more stabe and fewer false positives, time based information can be used. This means instead of doing fresh detection everytime with new frame, some history can be used. I have used a clustering method to do this. The output from this technique is shown here 
+
+### With filtering using the clustering method:
 
 [![Vehicle Detection with Clustering](http://img.youtube.com/vi/N-WdC5BG8eU/0.jpg)](https://www.youtube.com/watch?v=N-WdC5BG8eU)
 
